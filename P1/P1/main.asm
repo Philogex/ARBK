@@ -156,4 +156,4 @@ delay:
 end:
 	; never reached
 
-.EXIT
+.exit
