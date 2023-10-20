@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2P\P2\main.asm Fri Oct 20 23:19:59 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2P\P2\main.asm Fri Oct 20 23:32:21 2023
 
 
 EQU  SIGNATURE_000 0000001e
@@ -707,10 +707,4 @@ CSEG init         00000001
 CSEG main_loop    00000017
 CSEG delay        0000002a
 CSEG sw1_handler  0000002e
-CSEG sw2_handler  0000003a
-CSEG d0_on        00000034
-CSEG d0_blink     00000036
-CSEG d0_off       00000038
-CSEG d9_on        00000040
-CSEG d9_blink     00000042
-CSEG d9_off       00000044
+CSEG sw2_handler  00000035

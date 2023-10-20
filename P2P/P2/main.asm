@@ -18,7 +18,7 @@
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
-.equ DelayCycles = 10 ; (F_CPU / Prescaler) / 5
+.equ DelayCycles = (F_CPU / Prescaler) / 5
 
 .org 0x0000
     rjmp init
@@ -55,10 +55,10 @@ init:
 main_loop:
     rcall delay
 
-	sbic PIND, 0
+	sbis PIND, 0
 	rcall sw1_handler
 
-	sbic PIND, 1
+	sbis PIND, 1
 	rcall sw2_handler
 
     ; d0_off
@@ -88,7 +88,7 @@ main_loop:
 
 delay:
 	sbis TIFR1, OCF1A
-    rjmp main_loop
+    rjmp delay
 
     sbi TIFR1, OCF1A
 
@@ -96,35 +96,19 @@ delay:
 
 sw1_handler:
     sbrc led_state_d0d9, 4
-	rjmp d0_on
+	ldi led_state_d0d9, (1 << 5) | (1 << 0)
 	sbrc led_state_d0d9, 5
-	rjmp d0_blink
-	sbrc led_state_d0d9, 6
-	rjmp d0_off
-d0_on:
-    ldi led_state_d0d9, (1 << 5) | (1 << 0)
-	ret
-d0_blink:
 	ldi led_state_d0d9, (1 << 6) | (1 << 0)
-	ret
-d0_off:
+	sbrc led_state_d0d9, 6
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
 	ret
 
 sw2_handler:
     sbrc led_state_d0d9, 0
-	rjmp d9_on
+	ldi led_state_d0d9, (1 << 1) | (1 << 4)
 	sbrc led_state_d0d9, 1
-	rjmp d9_blink
-	sbrc led_state_d0d9, 2
-	rjmp d9_off
-d9_on:
-    ldi led_state_d0d9, (1 << 1) | (1 << 4)
-	ret
-d9_blink:
 	ldi led_state_d0d9, (1 << 2) | (1 << 4)
-	ret
-d9_off:
+	sbrc led_state_d0d9, 2
 	ldi led_state_d0d9, (1 << 0) | (1 << 4)
 	ret
 
