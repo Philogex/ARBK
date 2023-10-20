@@ -61,10 +61,10 @@ main_loop:
 
     sbi TIFR1, OCF1A
 
-	sbic PIND, 0
+	sbis PIND, 0
 	rcall sw1_handler
 
-	sbic PIND, 1
+	sbis PIND, 1
 	rcall sw2_handler
 
     ; d0_off
