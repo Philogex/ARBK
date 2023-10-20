@@ -53,8 +53,6 @@ init:
     sts OCR1AH, r16
 
 main_loop:
-    ; keep in mind, that this main loop can be interrupted at any point, and has to be as fool proof as possible.
-
     ; delay
     sbis TIFR1, OCF1A
     rjmp main_loop

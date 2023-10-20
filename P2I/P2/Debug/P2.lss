@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2I\P2\main.asm Fri Oct 20 17:33:40 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2I\P2\main.asm Fri Oct 20 22:20:10 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -1049,7 +1049,7 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = 10; (F_CPU / Prescaler) / 5
+                                 .equ DelayCycles = 10 ; (F_CPU / Prescaler) / 5
                                  
                                  .org 0x0000
 000000 c004                          rjmp init
@@ -1109,17 +1109,17 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
                                  
                                      ; d0_off
 000024 fd14                          sbrc led_state_d0d9, 4
-000025 e020                          ldi led_output, (0 << DDB0)
+000025 6020                          ori led_output, (0 << DDB0)
                                      ; d9_off
 000026 fd10                          sbrc led_state_d0d9, 0
-000027 e020                          ldi led_output, (0 << DDB1)
+000027 6020                          ori led_output, (0 << DDB1)
                                  
                                      ; d0_on
 000028 fd15                          sbrc led_state_d0d9, 5
-000029 e021                          ldi led_output, (1 << DDB0)
+000029 6021                          ori led_output, (1 << DDB0)
                                      ; d9_on
 00002a fd11                          sbrc led_state_d0d9, 1
-00002b e022                          ldi led_output, (1 << DDB1)
+00002b 6022                          ori led_output, (1 << DDB1)
                                  
                                      ; d0_blink
 00002c fd16                          sbrc led_state_d0d9, 6
@@ -1210,16 +1210,16 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   0 cpse  :   0 dec   :   0 eor   :   2 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  23 lds   :   0 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  19 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   4 out   :   7 pop   :   0 
 push  :   0 rcall :   0 ret   :   0 reti  :   6 rjmp  :  11 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :  12 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 10 out of 113 (8.8%)
+Instructions used: 11 out of 113 (9.7%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
