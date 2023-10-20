@@ -24,13 +24,14 @@
  <LABELS>
   <init><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>26</LINE></init>
   <main_loop><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>55</LINE></main_loop>
-  <sw1_handler><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>95</LINE></sw1_handler>
-  <sw2_handler><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>112</LINE></sw2_handler>
-  <d0_on><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>102</LINE></d0_on>
-  <d0_blink><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>105</LINE></d0_blink>
-  <d0_off><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>108</LINE></d0_off>
-  <d9_on><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>119</LINE></d9_on>
-  <d9_blink><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>122</LINE></d9_blink>
-  <d9_off><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>125</LINE></d9_off>
+  <delay><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>89</LINE></delay>
+  <sw1_handler><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>97</LINE></sw1_handler>
+  <sw2_handler><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>114</LINE></sw2_handler>
+  <d0_on><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>104</LINE></d0_on>
+  <d0_blink><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>107</LINE></d0_blink>
+  <d0_off><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>110</LINE></d0_off>
+  <d9_on><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>121</LINE></d9_on>
+  <d9_blink><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>124</LINE></d9_blink>
+  <d9_off><FILE>D:\Programming\AtmelStudio\P2P\P2\main.asm</FILE><LINE>127</LINE></d9_off>
  </LABELS>
 </ASSEMBLER_INFO>

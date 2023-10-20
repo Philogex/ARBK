@@ -18,7 +18,7 @@
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
-.equ DelayCycles = 10 ; (F_CPU / Prescaler) / 5
+.equ DelayCycles = (F_CPU / Prescaler) / 5
 
 .org 0x0000
     rjmp init
@@ -70,18 +70,14 @@ init:
 main_loop:
     ; keep in mind, that this main loop can be interrupted at any point, and has to be as fool proof as possible.
 
-    ; delay
-    sbis TIFR1, OCF1A
-    rjmp main_loop
-
-    sbi TIFR1, OCF1A
+	rcall delay
 
     ; d0_off
     sbrc led_state_d0d9, 4
-    andi led_output, (0 << DDB0)
+    andi led_output, ~(1 << DDB0)
     ; d9_off
     sbrc led_state_d0d9, 0
-    andi led_output, (0 << DDB1)
+    andi led_output, ~(1 << DDB1)
 
     ; d0_on
     sbrc led_state_d0d9, 5
@@ -100,6 +96,15 @@ main_loop:
     out PORTB, led_output
 
     rjmp main_loop
+
+delay:
+    ; delay
+    sbis TIFR1, OCF1A
+    rjmp main_loop
+
+    sbi TIFR1, OCF1A
+
+	ret
 
 int0_handler:
 	; rising edge of PD2 / SW1

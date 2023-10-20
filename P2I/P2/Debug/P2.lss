@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2I\P2\main.asm Fri Oct 20 22:23:20 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2I\P2\main.asm Fri Oct 20 23:06:55 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -1049,16 +1049,16 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = 10 ; (F_CPU / Prescaler) / 5
+                                 .equ DelayCycles = (F_CPU / Prescaler) / 5
                                  
                                  .org 0x0000
 000000 c004                          rjmp init
                                  
                                  .org INT0addr
-000002 c02f                          rjmp int0_handler
+000002 c031                          rjmp int0_handler
                                  
                                  .org INT1addr
-000004 c039                          rjmp int1_handler
+000004 c03b                          rjmp int1_handler
                                  
                                  init:
 000005 ef0f                          ldi r16, low(RAMEND)
@@ -1089,10 +1089,10 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
 000018 e003                          ldi r16, (1 << INT1) | (1 << INT0)
 000019 bb0d                          out EIMSK, r16 ; enable external interrupt source INT0 and INT1 [EIFR (1 << INTF1) | (1 << INTF0) can be set now]
                                  
-00001a e00a                          ldi r16, low(DelayCycles)
+00001a e305                          ldi r16, low(DelayCycles)
 00001b 9300 0088                     sts OCR1AL, r16
                                  
-00001d e000                          ldi r16, high(DelayCycles)
+00001d e00c                          ldi r16, high(DelayCycles)
 00001e 9300 0089                     sts OCR1AH, r16
                                  
                                      ; enable interrupts
@@ -1101,36 +1101,41 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
                                  main_loop:
                                      ; keep in mind, that this main loop can be interrupted at any point, and has to be as fool proof as possible.
                                  
-                                     ; delay
-000021 9bb1                          sbis TIFR1, OCF1A
-000022 cffe                          rjmp main_loop
-                                 
-000023 9ab1                          sbi TIFR1, OCF1A
+000021 d00e                      	rcall delay
                                  
                                      ; d0_off
-000024 fd14                          sbrc led_state_d0d9, 4
-000025 7020                          andi led_output, (0 << DDB0)
+000022 fd14                          sbrc led_state_d0d9, 4
+000023 7f2e                          andi led_output, ~(1 << DDB0)
                                      ; d9_off
-000026 fd10                          sbrc led_state_d0d9, 0
-000027 7020                          andi led_output, (0 << DDB1)
+000024 fd10                          sbrc led_state_d0d9, 0
+000025 7f2d                          andi led_output, ~(1 << DDB1)
                                  
                                      ; d0_on
-000028 fd15                          sbrc led_state_d0d9, 5
-000029 e021                          ldi led_output, (1 << DDB0)
+000026 fd15                          sbrc led_state_d0d9, 5
+000027 e021                          ldi led_output, (1 << DDB0)
                                      ; d9_on
-00002a fd11                          sbrc led_state_d0d9, 1
-00002b e022                          ldi led_output, (1 << DDB1)
+000028 fd11                          sbrc led_state_d0d9, 1
+000029 e022                          ldi led_output, (1 << DDB1)
                                  
                                      ; d0_blink
-00002c fd16                          sbrc led_state_d0d9, 6
-00002d 2724                          eor led_output, d0_inverter
+00002a fd16                          sbrc led_state_d0d9, 6
+00002b 2724                          eor led_output, d0_inverter
                                      ; d9_blink
-00002e fd12                          sbrc led_state_d0d9, 2
-00002f 2725                          eor led_output, d9_inverter
+00002c fd12                          sbrc led_state_d0d9, 2
+00002d 2725                          eor led_output, d9_inverter
                                  
-000030 b925                          out PORTB, led_output
+00002e b925                          out PORTB, led_output
                                  
+00002f cff1                          rjmp main_loop
+                                 
+                                 delay:
+                                     ; delay
+000030 9bb1                          sbis TIFR1, OCF1A
 000031 cfef                          rjmp main_loop
+                                 
+000032 9ab1                          sbi TIFR1, OCF1A
+                                 
+000033 9508                      	ret
                                  
                                  int0_handler:
                                  	; rising edge of PD2 / SW1
@@ -1138,42 +1143,42 @@ D:\Programming\AtmelStudio\P2I\P2\main.asm(9): Including file 'C:/Program Files 
                                      ; sbrs led_state_d0d9, 0
                                      ; reti
                                  
-000032 fd14                          sbrc led_state_d0d9, 4
-000033 c004                      	rjmp d0_on
-000034 fd15                      	sbrc led_state_d0d9, 5
-000035 c004                      	rjmp d0_blink
-000036 fd16                      	sbrc led_state_d0d9, 6
-000037 c004                      	rjmp d0_off
+000034 fd14                          sbrc led_state_d0d9, 4
+000035 c004                      	rjmp d0_on
+000036 fd15                      	sbrc led_state_d0d9, 5
+000037 c004                      	rjmp d0_blink
+000038 fd16                      	sbrc led_state_d0d9, 6
+000039 c004                      	rjmp d0_off
                                  d0_on:
-000038 e211                          ldi led_state_d0d9, (1 << 5) | (1 << 0)
-000039 9518                      	reti
-                                 d0_blink:
-00003a e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+00003a e211                          ldi led_state_d0d9, (1 << 5) | (1 << 0)
 00003b 9518                      	reti
-                                 d0_off:
-00003c e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+                                 d0_blink:
+00003c e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
 00003d 9518                      	reti
+                                 d0_off:
+00003e e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+00003f 9518                      	reti
                                  
                                  int1_handler:
                                  	; rising edge of PD3 / SW2
                                      ; make sure, that other led is off
                                      ; sbrs led_state_d0d9, 4
                                      ; reti
-00003e fd10                          sbrc led_state_d0d9, 0
-00003f c004                      	rjmp d9_on
-000040 fd11                      	sbrc led_state_d0d9, 1
-000041 c004                      	rjmp d9_blink
-000042 fd12                      	sbrc led_state_d0d9, 2
-000043 c004                      	rjmp d9_off
+000040 fd10                          sbrc led_state_d0d9, 0
+000041 c004                      	rjmp d9_on
+000042 fd11                      	sbrc led_state_d0d9, 1
+000043 c004                      	rjmp d9_blink
+000044 fd12                      	sbrc led_state_d0d9, 2
+000045 c004                      	rjmp d9_off
                                  d9_on:
-000044 e112                          ldi led_state_d0d9, (1 << 1) | (1 << 4)
-000045 9518                      	reti
-                                 d9_blink:
-000046 e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+000046 e112                          ldi led_state_d0d9, (1 << 1) | (1 << 4)
 000047 9518                      	reti
-                                 d9_off:
-000048 e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+                                 d9_blink:
+000048 e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
 000049 9518                      	reti
+                                 d9_off:
+00004a e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+00004b 9518                      	reti
                                  
 
 
@@ -1213,18 +1218,18 @@ fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0
 ld    :   0 ldd   :   0 ldi   :  21 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   6 rjmp  :  11 rol   :   0 
+push  :   0 rcall :   1 ret   :   1 reti  :   6 rjmp  :  11 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :  12 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 11 out of 113 (9.7%)
+Instructions used: 13 out of 113 (11.5%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000094    144      0    144   32768   0.4%
+[.cseg] 0x000000 0x000098    148      0    148   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
