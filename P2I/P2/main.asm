@@ -78,17 +78,17 @@ main_loop:
 
     ; d0_off
     sbrc led_state_d0d9, 4
-    ori led_output, (0 << DDB0)
+    andi led_output, (0 << DDB0)
     ; d9_off
     sbrc led_state_d0d9, 0
-    ori led_output, (0 << DDB1)
+    andi led_output, (0 << DDB1)
 
     ; d0_on
     sbrc led_state_d0d9, 5
-    ori led_output, (1 << DDB0)
+    ldi led_output, (1 << DDB0)
     ; d9_on
     sbrc led_state_d0d9, 1
-    ori led_output, (1 << DDB1)
+    ldi led_output, (1 << DDB1)
 
     ; d0_blink
     sbrc led_state_d0d9, 6
