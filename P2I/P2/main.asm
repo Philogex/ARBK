@@ -18,7 +18,7 @@
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
-.equ DelayCycles = 10; (F_CPU / Prescaler) / 5
+.equ DelayCycles = (F_CPU / Prescaler) / 5
 
 .org 0x0000
     rjmp init
@@ -44,8 +44,8 @@ init:
     ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
 	out DDRB, r16 ; PB0 / PB1 for D0 / D9 LED output respectively 
 
-	ldi d0_inverter, (1 << 5) | (1 << 4)
-    ldi d9_inverter, (1 << 1) | (1 << 0)
+	ldi d0_inverter, (1 << 0)
+    ldi d9_inverter, (1 << 1)
 
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
 
@@ -92,53 +92,56 @@ main_loop:
 
     ; d0_blink
     sbrc led_state_d0d9, 6
-    eor led_state_d0d9, d0_inverter
+    eor led_output, d0_inverter
     ; d9_blink
     sbrc led_state_d0d9, 2
-    eor led_state_d0d9, d9_inverter
+    eor led_output, d9_inverter
 
     out PORTB, led_output
 
     rjmp main_loop
 
 int0_handler:
-    ; rising edge of PD2 / SW1
+	; rising edge of PD2 / SW1
     ; make sure, that other led is off
     ; sbrs led_state_d0d9, 0
     ; reti
 
-    ; off -> on
     sbrc led_state_d0d9, 4
+	rjmp d0_on
+	sbrc led_state_d0d9, 5
+	rjmp d0_blink
+	sbrc led_state_d0d9, 6
+	rjmp d0_off
+d0_on:
     ldi led_state_d0d9, (1 << 5) | (1 << 0)
-
-    ; on -> blink
-    sbrc led_state_d0d9, 5
-    ldi led_state_d0d9, (1 << 6) | (1 << 5) | (1 << 0)
-
-    ; blink -> off
-    sbrc led_state_d0d9, 6
-    ldi led_state_d0d9, (1 << 4) | (1 << 0)
-
-    reti
+	reti
+d0_blink:
+	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+	reti
+d0_off:
+	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+	reti
 
 int1_handler:
-    ; rising edge of PD3 / SW2
+	; rising edge of PD3 / SW2
     ; make sure, that other led is off
     ; sbrs led_state_d0d9, 4
     ; reti
-
-    ; off -> on
     sbrc led_state_d0d9, 0
+	rjmp d9_on
+	sbrc led_state_d0d9, 1
+	rjmp d9_blink
+	sbrc led_state_d0d9, 2
+	rjmp d9_off
+d9_on:
     ldi led_state_d0d9, (1 << 1) | (1 << 4)
-
-    ; on -> blink
-    sbrc led_state_d0d9, 1
-    ldi led_state_d0d9, (1 << 3) | (1 << 2) | (1 << 4)
-
-    ; blink -> off
-    sbrc led_state_d0d9, 2
-    ldi led_state_d0d9, (1 << 0) | (1 << 4)
-
-    reti
+	reti
+d9_blink:
+	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+	reti
+d9_off:
+	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+	reti
 
 .exit
