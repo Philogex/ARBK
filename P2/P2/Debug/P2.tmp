@@ -22,9 +22,9 @@
   <FILE>P2.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <init><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>31</LINE></init>
-  <int0_handler><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>102</LINE></int0_handler>
-  <int1_handler><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>122</LINE></int1_handler>
-  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>68</LINE></main_loop>
+  <init><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>32</LINE></init>
+  <int0_handler><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>104</LINE></int0_handler>
+  <int1_handler><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>124</LINE></int1_handler>
+  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2\main.asm</FILE><LINE>70</LINE></main_loop>
  </LABELS>
 </ASSEMBLER_INFO>
