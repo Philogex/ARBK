@@ -1,0 +1,12 @@
+a)
+volatile sagt dem compiler nicht zu optimisieren, da sich die variable ändern könnte.
+
+b)
+2^16 Bits -> alle 65535secs
+
+c)
+unsigned hat automatisches wrapping bei den meisten c/cpp compilers.
+ich könnte modulo verwenden, falls fehler auftreten, was jedoch die cycles erhöht
+
+d)
+anderer Datentyp für systemClock, z.B. uint64_t oder den prescaler erhöhen

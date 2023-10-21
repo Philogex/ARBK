@@ -1,0 +1,7 @@
+g)
+vorteile:
+keine überflüssigen clock cycles
+mit überprüfung von inputs
+
+nachteile:
+falls eine isr aktiv ist, werden weitere blockiert, und müssen möglichst schnell gehen
