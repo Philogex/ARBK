@@ -16,7 +16,7 @@ volatile uint8_t number2 = 0;
 ISR(PCINT0_vect) {
 	
 	//increment button
-	if(!(PORTB & (1 << DDB0))) {
+	if(~DDB0) {
 		number1++;
 		if(number1 == 10) {
 			number1 = 0;
@@ -29,7 +29,7 @@ ISR(PCINT0_vect) {
 	}
 	
 	//decrement
-	if(!(PORTB & (1 << DDB1))) {
+	if(~DDB1) {
 		if(number1 == 0) {
 			if(number2 == 0) {
 				number1 = 9;
