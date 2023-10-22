@@ -12,34 +12,47 @@
 
 volatile uint8_t number1 = 0;
 volatile uint8_t number2 = 0;
+volatile uint8_t previous_state_b0 = 1;
+volatile uint8_t previous_state_b1 = 1;
 
-//increment button
 ISR(PCINT0_vect) {
-	number1++;
-	if(number1 == 10) {
-		number1 = 0;
-		number2++;
+	uint8_t current_state_b0 = PINB0;
+	uint8_t falling_edge_b0 = ~current_state_b0 & previous_state_b0;
+	previous_state_b0 = current_state_b0;
+	
+	
+	//increment button
+	if(falling_edge_b0 & !(PORTB & (1 << DDB0))) {
+		number1++;
+		if(number1 == 10) {
+			number1 = 0;
+			number2++;
+		}
+		if(number2 == 10) {
+			number1 = 0;
+			number2 = 0;
+		}
 	}
-	if(number2 == 10) {
-		number1 = 0;
-		number2 = 0;
-	}
-}
-
-//decrement button
-ISR(PCINT1_vect) {
-	if(number1 == 0) {
-		if(number2 == 0) {
-			number1 = 9;
-			number2 = 9;
+	
+	uint8_t current_state_b1 = PINB1;
+	uint8_t falling_edge_b1 = ~current_state_b1 & previous_state_b1;
+	previous_state_b1 = current_state_b1;
+	
+	//decrement
+	if(falling_edge_b1 & !(PORTB & (1 << DDB1))) {
+		if(number1 == 0) {
+			if(number2 == 0) {
+				number1 = 9;
+				number2 = 9;
+			}
+			else {
+				number2--;
+				number1 = 9;
+			}
 		}
 		else {
-			number2--;
-			number1 = 9;
+			number1--;
 		}
-	}
-	else {
-		number1--;
 	}
 }
 

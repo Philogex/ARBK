@@ -16,7 +16,7 @@ void init() {
 	PORTB |= (1 << DDB0) | (1 << DDB1);
 	
 	// allow interrupts for the two switches
-	PCICR |= (1 << PCIE0) | (1 << PCIE1);
+	PCICR |= (1 << PCIE0);
 	PCMSK0 |= (1 << PCINT0) | (1 << PCINT1);
 	
 	sei();
