@@ -48,15 +48,14 @@ void waitUntil(uint32_t ms)
 int main()
 {
 	init();
-	DDRB |= (1 << PB0);
-
+	DDRB |= (1 << DDB0);
+	
+	waitUntil(2000);
 	while (1)
 	{
 		PORTB ^= (1 << DDB0);
 		// one sec delay
 		waitFor(1000);
-		PORTB ^= (1 << DDB0);
-		waitUntil(65535);
 	}
 
 	return 0;
