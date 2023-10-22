@@ -14,6 +14,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-void display(const uint8_t number1, const uint8_t number2);
+void display(uint8_t number1, uint8_t number2);
 
 #endif /* SEVENSEG_H_ */

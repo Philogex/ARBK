@@ -10,8 +10,8 @@
 #include "sevenseg.h" 
 
 
-volatile uint8_t number1 = 0x00;
-volatile uint8_t number2 = 0x00;
+volatile uint8_t number1 = 0;
+volatile uint8_t number2 = 0;
 
 //increment button
 ISR(PCINT0_vect) {

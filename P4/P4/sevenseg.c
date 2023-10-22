@@ -21,10 +21,10 @@ const uint8_t numbers[] = {
 	0b00010000
 };
 
-void display(const uint8_t number1, const uint8_t number2) {
+void display(uint8_t number1, uint8_t number2) {
 	// lower number
 	PORTD = numbers[number1] | (1 << 7);
-	_delay_ms(2);
+	_delay_ms(5);
 	// higher number
 	PORTD = numbers[number2];
 }
