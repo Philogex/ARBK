@@ -5,6 +5,8 @@
  *  Author: gx
  */
 
+#include "sevenseg.h"
+
 //inverted 7-Segment Display
 const uint8_t numbers[] = {
 	0b01000000,
@@ -24,4 +26,5 @@ void display(const uint8_t number1, const uint8_t number2) {
 	PORTD = numbers[number1];
 	// higher number
 	PORTD = numbers[number2] | (1 << 7);
+	_delay_ms(15);
 }

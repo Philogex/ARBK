@@ -5,6 +5,8 @@
  *  Author: gx
  */ 
 
+#include "keys.h"
+
 void init() {
 	// PORTD as output. *10 bit + 7 value bits
 	DDRD |= 0b11111111;
