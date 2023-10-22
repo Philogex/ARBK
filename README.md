@@ -1,1 +1,1 @@
-i might add the AtmelStudio 7 projects, but it's just basic avr asm code for the ATMega328P
+Atmel Studio 7 Projects with basic avr asm and c code for the ATMega328P
