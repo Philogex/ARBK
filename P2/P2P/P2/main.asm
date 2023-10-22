@@ -3,8 +3,8 @@
 ;
 ; Created: 20.10.2023 16:57:17
 ; Author : gx
+; Description: PD0 to SW1 and PD1 to SW2. PB0 to D0 and PB1 to D9
 ;
-
 
 .include "m328pdef.inc"
 
@@ -15,6 +15,7 @@
 .def led_blinker = r19
 .def d0_inverter = r20
 .def d9_inverter = r21
+.def ret_addr = r22
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
@@ -95,21 +96,45 @@ delay:
 	ret
 
 sw1_handler:
+	pop ret_addr
     sbrc led_state_d0d9, 4
-	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+	rjmp d0_on
 	sbrc led_state_d0d9, 5
-	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+	rjmp d0_off
 	sbrc led_state_d0d9, 6
+	rjmp d0_blink
+d0_on:
+	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+	push ret_addr
+	ret
+d0_off:
+	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+	push ret_addr
+	ret
+d0_blink:
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+	push ret_addr
 	ret
 
 sw2_handler:
+	pop ret_addr
     sbrc led_state_d0d9, 0
-	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+	rjmp d9_on
 	sbrc led_state_d0d9, 1
-	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+	rjmp d9_off
 	sbrc led_state_d0d9, 2
+	rjmp d9_blink
+d9_on:
+	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+	push ret_addr
+	ret
+d9_off:
+	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+	push ret_addr
+	ret
+d9_blink:
 	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+	push ret_addr
 	ret
 
 .exit

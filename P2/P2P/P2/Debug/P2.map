@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2P\P2\main.asm Fri Oct 20 23:32:21 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Sun Oct 22 21:05:39 2023
 
 
 EQU  SIGNATURE_000 0000001e
@@ -700,11 +700,18 @@ DEF  led_output   r18
 DEF  led_blinker  r19
 DEF  d0_inverter  r20
 DEF  d9_inverter  r21
+DEF  ret_addr     r22
 EQU  F_CPU        00f42400
 EQU  Prescaler    00000400
-EQU  DelayCycles  0000000a
+EQU  DelayCycles  00000c35
 CSEG init         00000001
 CSEG main_loop    00000017
 CSEG delay        0000002a
 CSEG sw1_handler  0000002e
-CSEG sw2_handler  00000035
+CSEG sw2_handler  0000003e
+CSEG d0_on        00000035
+CSEG d0_off       00000038
+CSEG d0_blink     0000003b
+CSEG d9_on        00000045
+CSEG d9_off       00000048
+CSEG d9_blink     0000004b

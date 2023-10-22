@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2P\P2\main.asm Fri Oct 20 23:32:21 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Sun Oct 22 21:05:39 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
-D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
+D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
-D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
+D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
                                  
                                  ;
                                  
@@ -991,8 +991,8 @@ D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files 
                                  ;
                                  ; Created: 20.10.2023 16:57:17
                                  ; Author : gx
+                                 ; Description: PD0 to SW1 and PD1 to SW2. PB0 to D0 and PB1 to D9
                                  ;
-                                 
                                  
                                  .include "m328pdef.inc"
                                  
@@ -1046,10 +1046,11 @@ D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files 
                                  .def led_blinker = r19
                                  .def d0_inverter = r20
                                  .def d9_inverter = r21
+                                 .def ret_addr = r22
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = 10 ; (F_CPU / Prescaler) / 5
+                                 .equ DelayCycles = (F_CPU / Prescaler) / 5
                                  
                                  .org 0x0000
 000000 c000                          rjmp init
@@ -1077,10 +1078,10 @@ D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files 
 00000e e00d                          ldi r16, (1 << WGM12) | (1 << CS10) | (1 << CS12) ; CTC and 1024 Prescaler
 00000f 9300 0081                     sts TCCR1B, r16
                                  
-000011 e00a                          ldi r16, low(DelayCycles)
+000011 e305                          ldi r16, low(DelayCycles)
 000012 9300 0088                     sts OCR1AL, r16
                                  
-000014 e000                          ldi r16, high(DelayCycles)
+000014 e00c                          ldi r16, high(DelayCycles)
 000015 9300 0089                     sts OCR1AH, r16
                                  
                                  main_loop:
@@ -1090,7 +1091,7 @@ D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files 
 000019 d014                      	rcall sw1_handler
                                  
 00001a 9b49                      	sbis PIND, 1
-00001b d019                      	rcall sw2_handler
+00001b d022                      	rcall sw2_handler
                                  
                                      ; d0_off
 00001c fd14                          sbrc led_state_d0d9, 4
@@ -1126,22 +1127,46 @@ D:\Programming\AtmelStudio\P2P\P2\main.asm(9): Including file 'C:/Program Files 
 00002d 9508                      	ret
                                  
                                  sw1_handler:
-00002e fd14                          sbrc led_state_d0d9, 4
-00002f e211                      	ldi led_state_d0d9, (1 << 5) | (1 << 0)
-000030 fd15                      	sbrc led_state_d0d9, 5
-000031 e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
-000032 fd16                      	sbrc led_state_d0d9, 6
-000033 e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
-000034 9508                      	ret
+00002e 916f                      	pop ret_addr
+00002f fd14                          sbrc led_state_d0d9, 4
+000030 c004                      	rjmp d0_on
+000031 fd15                      	sbrc led_state_d0d9, 5
+000032 c005                      	rjmp d0_off
+000033 fd16                      	sbrc led_state_d0d9, 6
+000034 c006                      	rjmp d0_blink
+                                 d0_on:
+000035 e211                      	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+000036 936f                      	push ret_addr
+000037 9508                      	ret
+                                 d0_off:
+000038 e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+000039 936f                      	push ret_addr
+00003a 9508                      	ret
+                                 d0_blink:
+00003b e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+00003c 936f                      	push ret_addr
+00003d 9508                      	ret
                                  
                                  sw2_handler:
-000035 fd10                          sbrc led_state_d0d9, 0
-000036 e112                      	ldi led_state_d0d9, (1 << 1) | (1 << 4)
-000037 fd11                      	sbrc led_state_d0d9, 1
-000038 e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
-000039 fd12                      	sbrc led_state_d0d9, 2
-00003a e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
-00003b 9508                      	ret
+00003e 916f                      	pop ret_addr
+00003f fd10                          sbrc led_state_d0d9, 0
+000040 c004                      	rjmp d9_on
+000041 fd11                      	sbrc led_state_d0d9, 1
+000042 c005                      	rjmp d9_off
+000043 fd12                      	sbrc led_state_d0d9, 2
+000044 c006                      	rjmp d9_blink
+                                 d9_on:
+000045 e112                      	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+000046 936f                      	push ret_addr
+000047 9508                      	ret
+                                 d9_off:
+000048 e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+000049 936f                      	push ret_addr
+00004a 9508                      	ret
+                                 d9_blink:
+00004b e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+00004c 936f                      	push ret_addr
+00004d 9508                      	ret
                                  
 
 
@@ -1163,9 +1188,9 @@ counted separately from r26..r31 here.
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
 r13:   0 r14:   0 r15:   0 r16:  16 r17:  19 r18:   7 r19:   0 r20:   2 
-r21:   2 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r21:   2 r22:   8 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 5 out of 35 (14.3%)
+Registers used: 6 out of 35 (17.1%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
@@ -1180,19 +1205,19 @@ cpi   :   0 cpse  :   0 dec   :   0 eor   :   2 fmul  :   0 fmuls :   0
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
 ld    :   0 ldd   :   0 ldi   :  17 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   2 out   :   6 pop   :   0 
-push  :   0 rcall :   3 ret   :   3 reti  :   0 rjmp  :   3 rol   :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   2 out   :   6 pop   :   2 
+push  :   6 rcall :   3 ret   :   7 reti  :   0 rjmp  :   9 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   3 
 sbiw  :   0 sbr   :   0 sbrc  :  12 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   3 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 12 out of 113 (10.6%)
+Instructions used: 14 out of 113 (12.4%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000078    120      0    120   32768   0.4%
+[.cseg] 0x000000 0x00009c    156      0    156   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

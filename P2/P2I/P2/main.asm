@@ -15,6 +15,7 @@
 .def led_blinker = r19
 .def d0_inverter = r20
 .def d9_inverter = r21
+.def ret_addr = r22
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
@@ -111,13 +112,24 @@ int0_handler:
     ; make sure, that other led is off
     ; sbrs led_state_d0d9, 0
     ; reti
-
+	pop ret_addr
     sbrc led_state_d0d9, 4
-	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+	rjmp d0_on
 	sbrc led_state_d0d9, 5
-	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+	rjmp d0_off
 	sbrc led_state_d0d9, 6
+	rjmp d0_blink
+d0_on:
+	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+	push ret_addr
+	reti
+d0_off:
+	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+	push ret_addr
+	reti
+d0_blink:
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+	push ret_addr
 	reti
 
 int1_handler:
@@ -125,12 +137,24 @@ int1_handler:
     ; make sure, that other led is off
     ; sbrs led_state_d0d9, 4
     ; reti
+	pop ret_addr
     sbrc led_state_d0d9, 0
-	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+	rjmp d9_on
 	sbrc led_state_d0d9, 1
-	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+	rjmp d9_off
 	sbrc led_state_d0d9, 2
+	rjmp d9_blink
+d9_on:
+	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+	push ret_addr
+	reti
+d9_off:
+	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+	push ret_addr
+	reti
+d9_blink:
 	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+	push ret_addr
 	reti
 
 .exit

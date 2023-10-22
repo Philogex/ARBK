@@ -1,18 +1,18 @@
 <ASSEMBLER_INFO>
  <VERSION>2.2.7</VERSION>
  <DEVICE>"ATmega328P"</DEVICE>
- <WORKING_DIR>D:\Programming\AtmelStudio\P2I\P2\Debug</WORKING_DIR>
+ <WORKING_DIR>D:\Programming\AtmelStudio\P2\P2I\P2\Debug</WORKING_DIR>
  <INCLUDE_PATH>
   <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc</DIR>
   <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
   <DIR></DIR>
  </INCLUDE_PATH>
- <SOURCE_FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</SOURCE_FILE>
+ <SOURCE_FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</SOURCE_FILE>
  <INCLUDED_FILES>
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
-  <FILE>D:\Programming\AtmelStudio\P2I\P2\Debug\P2.obj</FILE>
+  <FILE>D:\Programming\AtmelStudio\P2\P2I\P2\Debug\P2.obj</FILE>
  </OBJECT_FILES>
  <HEX_FILES>
   <FILE>P2.hex</FILE>
@@ -22,16 +22,16 @@
   <FILE>P2.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <init><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>32</LINE></init>
-  <int0_handler><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>109</LINE></int0_handler>
-  <int1_handler><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>131</LINE></int1_handler>
-  <main_loop><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>70</LINE></main_loop>
-  <delay><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>100</LINE></delay>
-  <d0_on><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>121</LINE></d0_on>
-  <d0_blink><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>124</LINE></d0_blink>
-  <d0_off><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>127</LINE></d0_off>
-  <d9_on><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>142</LINE></d9_on>
-  <d9_blink><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>145</LINE></d9_blink>
-  <d9_off><FILE>D:\Programming\AtmelStudio\P2I\P2\main.asm</FILE><LINE>148</LINE></d9_off>
+  <init><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>33</LINE></init>
+  <int0_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>110</LINE></int0_handler>
+  <int1_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>135</LINE></int1_handler>
+  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>71</LINE></main_loop>
+  <delay><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>101</LINE></delay>
+  <d0_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>122</LINE></d0_on>
+  <d0_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>126</LINE></d0_off>
+  <d0_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>130</LINE></d0_blink>
+  <d9_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>147</LINE></d9_on>
+  <d9_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>151</LINE></d9_off>
+  <d9_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>155</LINE></d9_blink>
  </LABELS>
 </ASSEMBLER_INFO>
