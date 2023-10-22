@@ -19,7 +19,7 @@
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
-.equ DelayCycles = (F_CPU / Prescaler) / 5
+.equ DelayCycles = (F_CPU / Prescaler)
 
 .org 0x0000
     rjmp init
@@ -33,7 +33,7 @@ init:
 	ldi r16, (0 << DDD0) | (0 << DDD1) ; 0b00000000
 	out DDRD, r16 ; PD0 / PD1 for SW1 / SW2 respectively
 
-	ldi r16, 0b11111111
+	ldi r16, (1 << PIND0) | (1 << PIND1)
     out PORTD, r16 ; pullup for Input
 
     ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
@@ -64,17 +64,17 @@ main_loop:
 
     ; d0_off
     sbrc led_state_d0d9, 4
-    andi led_output, ~(1 << DDB0)
+    andi led_output, ~(1 << PINB0)
     ; d9_off
     sbrc led_state_d0d9, 0
-    andi led_output, ~(1 << DDB1)
+    andi led_output, ~(1 << PINB1)
 
     ; d0_on
     sbrc led_state_d0d9, 5
-    ori led_output, (1 << DDB0)
+    ori led_output, (1 << PINB0)
     ; d9_on
     sbrc led_state_d0d9, 1
-    ori led_output, (1 << DDB1)
+    ori led_output, (1 << PINB1)
 
     ; d0_blink
     sbrc led_state_d0d9, 6

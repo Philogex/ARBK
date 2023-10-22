@@ -8,14 +8,16 @@
 #include "keys.h"
 
 void init() {
-	// PORTD as output. *10 bit + 7 value bits
-	DDRD |= 0b11111111;
+	//PORTD as output
+	DDRD = 0b11111111;
+	PORTD |= (1 << PIND0);
 	
-	// input for switches with pull up resistor
-	DDRB |= (0 << DDB0) | (0 << DDB1);
-	PORTB |= (1 << DDB0) | (1 << DDB1);
+	//input for switches with pull up resistor
+	DDRB = (0 << DDB0) | (0 << DDB1);
+	PORTB |= (1 << PINB0) | (1 << PINB1);
 	
-	// allow interrupts for the two switches
+	//cli();
+	//allow interrupts for the two switches
 	PCICR |= (1 << PCIE0);
 	PCMSK0 |= (1 << PCINT0) | (1 << PCINT1);
 	

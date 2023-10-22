@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Sun Oct 22 21:22:43 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Sun Oct 22 23:17:33 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -1050,7 +1050,7 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = (F_CPU / Prescaler) / 5
+                                 .equ DelayCycles = (F_CPU / Prescaler) / 10
                                  
                                  .org 0x0000
 000000 c000                          rjmp init
@@ -1064,7 +1064,7 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
 000005 e000                      	ldi r16, (0 << DDD0) | (0 << DDD1) ; 0b00000000
 000006 b90a                      	out DDRD, r16 ; PD0 / PD1 for SW1 / SW2 respectively
                                  
-000007 ef0f                      	ldi r16, 0b11111111
+000007 e003                      	ldi r16, (1 << PIND0) | (1 << PIND1)
 000008 b90b                          out PORTD, r16 ; pullup for Input
                                  
 000009 e003                          ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
@@ -1078,10 +1078,10 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
 00000e e00d                          ldi r16, (1 << WGM12) | (1 << CS10) | (1 << CS12) ; CTC and 1024 Prescaler
 00000f 9300 0081                     sts TCCR1B, r16
                                  
-000011 e305                          ldi r16, low(DelayCycles)
+000011 e10a                          ldi r16, low(DelayCycles)
 000012 9300 0088                     sts OCR1AL, r16
                                  
-000014 e00c                          ldi r16, high(DelayCycles)
+000014 e006                          ldi r16, high(DelayCycles)
 000015 9300 0089                     sts OCR1AH, r16
                                  
                                  main_loop:
