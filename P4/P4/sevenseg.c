@@ -23,8 +23,8 @@ const uint8_t numbers[] = {
 
 void display(const uint8_t number1, const uint8_t number2) {
 	// lower number
-	PORTD = numbers[number1];
+	PORTD = numbers[number1] | (1 << 7);
+	_delay_ms(2);
 	// higher number
-	PORTD = numbers[number2] | (1 << 7);
-	_delay_ms(15);
+	PORTD = numbers[number2];
 }
