@@ -17,7 +17,7 @@ volatile uint8_t number2 = 0;
 ISR(PCINT0_vect) {
 	number1++;
 	if(number1 == 10) {
-		number1 = number1 % 10;
+		number1 = 0;
 		number2++;
 	}
 	if(number2 == 10) {
@@ -46,7 +46,8 @@ ISR(PCINT1_vect) {
 int main(void)
 {
 	init();
-	while(1)
+	while(1) {
 		display(number1, number2);
+	}
 }
 

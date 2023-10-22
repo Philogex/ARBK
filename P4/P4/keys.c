@@ -17,8 +17,7 @@ void init() {
 	
 	// allow interrupts for the two switches
 	PCICR |= (1 << PCIE0) | (1 << PCIE1);
-	PCMSK0 |= (1 << PCINT0);
-	PCMSK1 |= (1 << PCINT1);
+	PCMSK0 |= (1 << PCINT0) | (1 << PCINT1);
 	
 	sei();
 }
