@@ -2,7 +2,7 @@ a)
 volatile sagt dem compiler nicht zu optimisieren, da sich die variable ändern könnte.
 
 b)
-2^16 Bits -> alle 65535secs
+2^32 Bits -> alle 4294967.296 secs
 
 c)
 unsigned hat automatisches wrapping bei den meisten c/cpp compilers.
