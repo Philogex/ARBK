@@ -7,7 +7,6 @@
  */ 
 
 #include <avr/io.h>
-#include <stdbool.h>
 
 #include "keys.h"
 #include "sevenseg.h" 
