@@ -1,10 +1,10 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2I\P2\main.asm Mon Oct 23 12:21:15 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\test_asm\test_asm\main.asm Mon Oct 23 12:19:17 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
-D:\Programming\AtmelStudio\P2\P2I\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
+D:\Programming\AtmelStudio\test_asm\test_asm\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
-D:\Programming\AtmelStudio\P2\P2I\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
+D:\Programming\AtmelStudio\test_asm\test_asm\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
                                  
                                  ;
                                  
@@ -989,9 +989,9 @@ D:\Programming\AtmelStudio\P2\P2I\P2\main.asm(9): Including file 'C:/Program Fil
                                  
                                  ; P2.asm
                                  ;
-                                 ; Created: 19.10.2023 17:15:13
+                                 ; Created: 20.10.2023 16:57:17
                                  ; Author : gx
-                                 ; Description: Uses PB0 and PB1 to control D0 and D9 respectively, as well as PD2 and PD3 as interrupt inputs connected to SW1 and SW2 respectively
+                                 ; Description: PD0 to SW1 and PD1 to SW2. PB0 to D0 and PB1 to D9
                                  ;
                                  
                                  .include "m328pdef.inc"
@@ -1050,141 +1050,128 @@ D:\Programming\AtmelStudio\P2\P2I\P2\main.asm(9): Including file 'C:/Program Fil
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = (F_CPU / Prescaler) / 5
+                                 .equ DelayCycles = (F_CPU / Prescaler)
                                  
                                  .org 0x0000
-000000 c004                          rjmp init
-                                 
-                                 .org INT0addr
-000002 c031                          rjmp int0_handler
-                                 
-                                 .org INT1addr
-000004 c03f                          rjmp int1_handler
+000000 c000                          rjmp init
                                  
                                  init:
                                  	; init stack pointer
-000005 ef0f                          ldi r16, low(RAMEND)
-000006 bf0d                          out SPL, r16
-000007 e008                          ldi r16, high(RAMEND)
-000008 bf0e                          out SPH, r16
+000001 ef0f                          ldi r16, low(RAMEND)
+000002 bf0d                          out SPL, r16
+000003 e008                          ldi r16, high(RAMEND)
+000004 bf0e                          out SPH, r16
                                  
                                  	; set input
-000009 e000                      	ldi r16, (0 << DDD2) | (0 << DDD3) ; 0b00000000
-00000a b90a                      	out DDRD, r16 ; PD2 / PD3 for SW1 / SW2 respectively
-00000b ef0f                      	ldi r16, 0b11111111
-00000c b90b                          out PORTD, r16 ; pullup for Input
+000005 e000                      	ldi r16, (0 << DDD2) | (0 << DDD3) ; 0b00000000
+000006 b90a                      	out DDRD, r16 ; PD2 / PD3 for SW1 / SW2 respectively
+000007 e00c                      	ldi r16, (1 << DDD2) | (1 << DDD3)
+000008 b90b                          out PORTD, r16 ; pullup for Input
                                  
                                  	; set output
-00000d e003                          ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
-00000e b904                      	out DDRB, r16 ; PB0 / PB1 for D0 / D9 LED output respectively 
+000009 e003                          ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
+00000a b904                      	out DDRB, r16 ; PB0 / PB1 for D0 / D9 LED output respectively 
                                  
-                                 	; init inverter registers
-00000f e041                      	ldi d0_inverter, (1 << 0)
-000010 e052                          ldi d9_inverter, (1 << 1)
+                                 	; init inverter register
+00000b e041                      	ldi d0_inverter, (1 << 0)
+00000c e052                          ldi d9_inverter, (1 << 1)
                                  
                                  	; init led FSM
-000011 e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+00000d e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
                                  
-                                 
-                                     ; init timer
-000012 e02d                          ldi r18, (1 << WGM12) | (1 << CS10) | (1 << CS12)
-000013 9320 0081                 	sts TCCR1B, r18
+                                 	; init timer
+00000e e02d                          ldi r18, (1 << WGM12) | (1 << CS10) | (1 << CS12)
+00000f 9320 0081                 	sts TCCR1B, r18
                                  
                                      ; init compare register for timer
-000015 e02c                          ldi r18, high(DelayCycles)
-000016 9320 0089                 	sts OCR1AH, r18
-000018 e325                      	ldi r18, low(DelayCycles)
-000019 9320 0088                 	sts OCR1AL, r18
-                                 
-                                 	; rising edge for both interrupts
-00001b e00a                      	ldi r16, (1 << ISC01) | (1 << ISC11)
-00001c 9300 0069                     sts EICRA, r16
-                                 	; enable external interrupt source INT0 and INT1 [EIFR (1 << INTF1) | (1 << INTF0) can be set now]
-00001e e003                          ldi r16, (1 << INT1) | (1 << INT0)
-00001f bb0d                          out EIMSK, r16
-                                 
-                                     ; enable interrupts
-000020 9478                          sei
+000011 e32d                          ldi r18, high(DelayCycles)
+000012 9320 0089                 	sts OCR1AH, r18
+000014 e029                      	ldi r18, low(DelayCycles)
+000015 9320 0088                 	sts OCR1AL, r18
                                  
                                  main_loop:
-                                     ; keep in mind, that this main loop can be interrupted at any point, and has to be as fool proof as possible.
+000017 d012                          rcall delay
                                  
-000021 d00e                      	rcall delay
+000018 9b4a                      	sbis PIND, 2
+000019 d014                      	rcall sw1_handler
+                                 
+00001a 9b4b                      	sbis PIND, 3
+00001b d022                      	rcall sw2_handler
                                  
                                      ; d0_off
-000022 fd14                          sbrc led_state_d0d9, 4
-000023 7f2e                          andi led_output, ~(1 << PINB0)
+00001c fd14                          sbrc led_state_d0d9, 4
+00001d 7f2e                          andi led_output, ~(1 << DDB0)
                                      ; d9_off
-000024 fd10                          sbrc led_state_d0d9, 0
-000025 7f2d                          andi led_output, ~(1 << PINB1)
+00001e fd10                          sbrc led_state_d0d9, 0
+00001f 7f2d                          andi led_output, ~(1 << DDB1)
                                  
                                      ; d0_on
-000026 fd15                          sbrc led_state_d0d9, 5
-000027 e021                          ldi led_output, (1 << PINB0)
+000020 fd15                          sbrc led_state_d0d9, 5
+000021 6021                          ori led_output, (1 << DDB0)
                                      ; d9_on
-000028 fd11                          sbrc led_state_d0d9, 1
-000029 e022                          ldi led_output, (1 << PINB1)
+000022 fd11                          sbrc led_state_d0d9, 1
+000023 6022                          ori led_output, (1 << DDB1)
                                  
                                      ; d0_blink
-00002a fd16                          sbrc led_state_d0d9, 6
-00002b 2724                          eor led_output, d0_inverter
+000024 fd16                          sbrc led_state_d0d9, 6
+000025 2724                          eor led_output, d0_inverter
                                      ; d9_blink
-00002c fd12                          sbrc led_state_d0d9, 2
-00002d 2725                          eor led_output, d9_inverter
+000026 fd12                          sbrc led_state_d0d9, 2
+000027 2725                          eor led_output, d9_inverter
                                  
-00002e b925                          out PORTB, led_output
+000028 b925                          out PORTB, led_output
                                  
-00002f cff1                          rjmp main_loop
+000029 cfed                          rjmp main_loop
                                  
                                  delay:
-000030 9bb1                          sbis TIFR1, OCF1A
-000031 cffe                          rjmp delay
+00002a 9bb1                          sbis TIFR1, OCF1A
+00002b cffe                          rjmp delay
                                  
-000032 9ab1                          sbi TIFR1, OCF1A
+00002c 9ab1                          sbi TIFR1, OCF1A
                                  
-000033 9508                      	ret
+00002d 9508                      	ret
                                  
-                                 int0_handler:
-000034 916f                      	pop ret_addr
-000035 fd14                          sbrc led_state_d0d9, 4
-000036 c004                      	rjmp d0_on
-000037 fd15                      	sbrc led_state_d0d9, 5
-000038 c005                      	rjmp d0_off
-000039 fd16                      	sbrc led_state_d0d9, 6
-00003a c006                      	rjmp d0_blink
+                                 sw1_handler:
+00002e 916f                      	pop ret_addr
+00002f fd14                          sbrc led_state_d0d9, 4
+000030 c004                      	rjmp d0_on
+000031 fd15                      	sbrc led_state_d0d9, 5
+000032 c005                      	rjmp d0_off
+000033 fd16                      	sbrc led_state_d0d9, 6
+000034 c006                      	rjmp d0_blink
                                  d0_on:
-00003b e211                      	ldi led_state_d0d9, (1 << 5) | (1 << 0)
-00003c 936f                      	push ret_addr
-00003d 9518                      	reti
+000035 e211                      	ldi led_state_d0d9, (1 << 5) | (1 << 0)
+000036 936f                      	push ret_addr
+000037 9508                      	ret
                                  d0_off:
-00003e e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
-00003f 936f                      	push ret_addr
-000040 9518                      	reti
+000038 e411                      	ldi led_state_d0d9, (1 << 6) | (1 << 0)
+000039 936f                      	push ret_addr
+00003a 9508                      	ret
                                  d0_blink:
-000041 e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
-000042 936f                      	push ret_addr
-000043 9518                      	reti
+00003b e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
+00003c 936f                      	push ret_addr
+00003d 9508                      	ret
                                  
-                                 int1_handler:
-000044 916f                      	pop ret_addr
-000045 fd10                          sbrc led_state_d0d9, 0
-000046 c004                      	rjmp d9_on
-000047 fd11                      	sbrc led_state_d0d9, 1
-000048 c005                      	rjmp d9_off
-000049 fd12                      	sbrc led_state_d0d9, 2
-00004a c006                      	rjmp d9_blink
+                                 sw2_handler:
+00003e 916f                      	pop ret_addr
+00003f fd10                          sbrc led_state_d0d9, 0
+000040 c004                      	rjmp d9_on
+000041 fd11                      	sbrc led_state_d0d9, 1
+000042 c005                      	rjmp d9_off
+000043 fd12                      	sbrc led_state_d0d9, 2
+000044 c006                      	rjmp d9_blink
                                  d9_on:
-00004b e112                      	ldi led_state_d0d9, (1 << 1) | (1 << 4)
-00004c 936f                      	push ret_addr
-00004d 9518                      	reti
+000045 e112                      	ldi led_state_d0d9, (1 << 1) | (1 << 4)
+000046 936f                      	push ret_addr
+000047 9508                      	ret
                                  d9_off:
-00004e e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
-00004f 936f                      	push ret_addr
-000050 9518                      	reti
+000048 e114                      	ldi led_state_d0d9, (1 << 2) | (1 << 4)
+000049 936f                      	push ret_addr
+00004a 9508                      	ret
                                  d9_blink:
-000051 e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
-000052 936f                      	push ret_addr
-000053 9518                      	reti
+00004b e111                      	ldi led_state_d0d9, (1 << 0) | (1 << 4)
+00004c 936f                      	push ret_addr
+00004d 9508                      	ret
                                  
 
 
@@ -1205,7 +1192,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  14 r17:  19 r18:  13 r19:   0 r20:   2 
+r13:   0 r14:   0 r15:   0 r16:  10 r17:  19 r18:  13 r19:   0 r20:   2 
 r21:   2 r22:   8 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 6 out of 35 (17.1%)
@@ -1221,21 +1208,21 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   0 cpse  :   0 dec   :   0 eor   :   2 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  21 lds   :   0 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  17 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   2 
-push  :   6 rcall :   1 ret   :   1 reti  :   6 rjmp  :  11 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   1 
+neg   :   0 nop   :   0 or    :   0 ori   :   2 out   :   6 pop   :   2 
+push  :   6 rcall :   3 ret   :   7 reti  :   0 rjmp  :   9 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   3 
 sbiw  :   0 sbr   :   0 sbrc  :  12 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
+sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   3 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 15 out of 113 (13.3%)
+Instructions used: 14 out of 113 (12.4%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000a8    164      0    164   32768   0.5%
+[.cseg] 0x000000 0x00009c    156      0    156   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Mon Oct 23 12:22:31 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\test_asm\test_asm\main.asm Mon Oct 23 12:19:17 2023
 
 
 EQU  SIGNATURE_000 0000001e
@@ -703,7 +703,7 @@ DEF  d9_inverter  r21
 DEF  ret_addr     r22
 EQU  F_CPU        00f42400
 EQU  Prescaler    00000400
-EQU  DelayCycles  00000c35
+EQU  DelayCycles  00003d09
 CSEG init         00000001
 CSEG main_loop    00000017
 CSEG delay        0000002a

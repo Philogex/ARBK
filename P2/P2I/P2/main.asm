@@ -31,39 +31,46 @@
     rjmp int1_handler
 
 init:
+	; init stack pointer
     ldi r16, low(RAMEND)
     out SPL, r16
     ldi r16, high(RAMEND)
     out SPH, r16
 
+	; set input
 	ldi r16, (0 << DDD2) | (0 << DDD3) ; 0b00000000
 	out DDRD, r16 ; PD2 / PD3 for SW1 / SW2 respectively
-
 	ldi r16, 0b11111111
     out PORTD, r16 ; pullup for Input
 
+	; set output
     ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
 	out DDRB, r16 ; PB0 / PB1 for D0 / D9 LED output respectively 
 
+	; init inverter registers
 	ldi d0_inverter, (1 << 0)
     ldi d9_inverter, (1 << 1)
 
+	; init led FSM
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
 
-    ldi r16, (1 << WGM12) | (1 << CS10) | (1 << CS12) ; CTC and 1024 Prescaler
-    sts TCCR1B, r16
 
+    ; init timer
+    ldi r18, (1 << WGM12) | (1 << CS10) | (1 << CS12)
+	sts TCCR1B, r18
+
+    ; init compare register for timer
+    ldi r18, high(DelayCycles)
+	sts OCR1AH, r18
+	ldi r18, low(DelayCycles)
+	sts OCR1AL, r18
+
+	; rising edge for both interrupts
 	ldi r16, (1 << ISC01) | (1 << ISC11)
     sts EICRA, r16
-
+	; enable external interrupt source INT0 and INT1 [EIFR (1 << INTF1) | (1 << INTF0) can be set now]
     ldi r16, (1 << INT1) | (1 << INT0)
-    out EIMSK, r16 ; enable external interrupt source INT0 and INT1 [EIFR (1 << INTF1) | (1 << INTF0) can be set now]
-
-    ldi r16, low(DelayCycles)
-    sts OCR1AL, r16
-
-    ldi r16, high(DelayCycles)
-    sts OCR1AH, r16
+    out EIMSK, r16
 
     ; enable interrupts
     sei
@@ -99,7 +106,6 @@ main_loop:
     rjmp main_loop
 
 delay:
-    ; delay
     sbis TIFR1, OCF1A
     rjmp delay
 
@@ -108,10 +114,6 @@ delay:
 	ret
 
 int0_handler:
-	; rising edge of PD2 / SW1
-    ; make sure, that other led is off
-    ; sbrs led_state_d0d9, 0
-    ; reti
 	pop ret_addr
     sbrc led_state_d0d9, 4
 	rjmp d0_on
@@ -133,10 +135,6 @@ d0_blink:
 	reti
 
 int1_handler:
-	; rising edge of PD3 / SW2
-    ; make sure, that other led is off
-    ; sbrs led_state_d0d9, 4
-    ; reti
 	pop ret_addr
     sbrc led_state_d0d9, 0
 	rjmp d9_on

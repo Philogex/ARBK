@@ -23,15 +23,15 @@
  </OUTPUT_FILES>
  <LABELS>
   <init><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>33</LINE></init>
-  <int0_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>110</LINE></int0_handler>
-  <int1_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>135</LINE></int1_handler>
-  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>71</LINE></main_loop>
-  <delay><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>101</LINE></delay>
-  <d0_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>122</LINE></d0_on>
-  <d0_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>126</LINE></d0_off>
-  <d0_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>130</LINE></d0_blink>
-  <d9_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>147</LINE></d9_on>
-  <d9_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>151</LINE></d9_off>
-  <d9_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>155</LINE></d9_blink>
+  <int0_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>116</LINE></int0_handler>
+  <int1_handler><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>137</LINE></int1_handler>
+  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>78</LINE></main_loop>
+  <delay><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>108</LINE></delay>
+  <d0_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>124</LINE></d0_on>
+  <d0_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>128</LINE></d0_off>
+  <d0_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>132</LINE></d0_blink>
+  <d9_on><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>145</LINE></d9_on>
+  <d9_off><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>149</LINE></d9_off>
+  <d9_blink><FILE>D:\Programming\AtmelStudio\P2\P2I\P2\main.asm</FILE><LINE>153</LINE></d9_blink>
  </LABELS>
 </ASSEMBLER_INFO>

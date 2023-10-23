@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Sun Oct 22 23:17:33 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P2\P2P\P2\main.asm Mon Oct 23 12:22:31 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
@@ -991,7 +991,7 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
                                  ;
                                  ; Created: 20.10.2023 16:57:17
                                  ; Author : gx
-                                 ; Description: PD0 to SW1 and PD1 to SW2. PB0 to D0 and PB1 to D9
+                                 ; Description: PD2 to SW1 and PD3 to SW2. PB0 to D0 and PB1 to D9
                                  ;
                                  
                                  .include "m328pdef.inc"
@@ -1050,47 +1050,52 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
                                  
                                  .equ F_CPU = 16000000
                                  .equ Prescaler = 1024
-                                 .equ DelayCycles = (F_CPU / Prescaler) / 10
+                                 .equ DelayCycles = (F_CPU / Prescaler) / 5
                                  
                                  .org 0x0000
 000000 c000                          rjmp init
                                  
                                  init:
+                                 	; init stack pointer
 000001 ef0f                          ldi r16, low(RAMEND)
 000002 bf0d                          out SPL, r16
 000003 e008                          ldi r16, high(RAMEND)
 000004 bf0e                          out SPH, r16
                                  
-000005 e000                      	ldi r16, (0 << DDD0) | (0 << DDD1) ; 0b00000000
-000006 b90a                      	out DDRD, r16 ; PD0 / PD1 for SW1 / SW2 respectively
-                                 
-000007 e003                      	ldi r16, (1 << PIND0) | (1 << PIND1)
+                                 	; set input
+000005 e000                      	ldi r16, (0 << DDD2) | (0 << DDD3) ; 0b00000000
+000006 b90a                      	out DDRD, r16 ; PD2 / PD3 for SW1 / SW2 respectively
+000007 e00c                      	ldi r16, (1 << DDD2) | (1 << DDD3)
 000008 b90b                          out PORTD, r16 ; pullup for Input
                                  
+                                 	; set output
 000009 e003                          ldi r16, (1 << DDB0) | (1 << DDB1) ; 0b00000011
 00000a b904                      	out DDRB, r16 ; PB0 / PB1 for D0 / D9 LED output respectively 
                                  
+                                 	; init inverter register
 00000b e041                      	ldi d0_inverter, (1 << 0)
 00000c e052                          ldi d9_inverter, (1 << 1)
                                  
+                                 	; init led FSM
 00000d e111                      	ldi led_state_d0d9, (1 << 4) | (1 << 0)
                                  
-00000e e00d                          ldi r16, (1 << WGM12) | (1 << CS10) | (1 << CS12) ; CTC and 1024 Prescaler
-00000f 9300 0081                     sts TCCR1B, r16
+                                 	; init timer
+00000e e02d                          ldi r18, (1 << WGM12) | (1 << CS10) | (1 << CS12)
+00000f 9320 0081                 	sts TCCR1B, r18
                                  
-000011 e10a                          ldi r16, low(DelayCycles)
-000012 9300 0088                     sts OCR1AL, r16
-                                 
-000014 e006                          ldi r16, high(DelayCycles)
-000015 9300 0089                     sts OCR1AH, r16
+                                     ; init compare register for timer
+000011 e02c                          ldi r18, high(DelayCycles)
+000012 9320 0089                 	sts OCR1AH, r18
+000014 e325                      	ldi r18, low(DelayCycles)
+000015 9320 0088                 	sts OCR1AL, r18
                                  
                                  main_loop:
 000017 d012                          rcall delay
                                  
-000018 9b48                      	sbis PIND, 0
+000018 9b4a                      	sbis PIND, 2
 000019 d014                      	rcall sw1_handler
                                  
-00001a 9b49                      	sbis PIND, 1
+00001a 9b4b                      	sbis PIND, 3
 00001b d022                      	rcall sw2_handler
                                  
                                      ; d0_off
@@ -1119,7 +1124,7 @@ D:\Programming\AtmelStudio\P2\P2P\P2\main.asm(9): Including file 'C:/Program Fil
 000029 cfed                          rjmp main_loop
                                  
                                  delay:
-00002a 9bb1                      	sbis TIFR1, OCF1A
+00002a 9bb1                          sbis TIFR1, OCF1A
 00002b cffe                          rjmp delay
                                  
 00002c 9ab1                          sbi TIFR1, OCF1A
@@ -1187,7 +1192,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  16 r17:  19 r18:   7 r19:   0 r20:   2 
+r13:   0 r14:   0 r15:   0 r16:  10 r17:  19 r18:  13 r19:   0 r20:   2 
 r21:   2 r22:   8 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 6 out of 35 (17.1%)

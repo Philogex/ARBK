@@ -23,15 +23,15 @@
  </OUTPUT_FILES>
  <LABELS>
   <init><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>27</LINE></init>
-  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>56</LINE></main_loop>
-  <delay><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>90</LINE></delay>
-  <sw1_handler><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>98</LINE></sw1_handler>
-  <sw2_handler><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>119</LINE></sw2_handler>
-  <d0_on><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>106</LINE></d0_on>
-  <d0_off><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>110</LINE></d0_off>
-  <d0_blink><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>114</LINE></d0_blink>
-  <d9_on><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>127</LINE></d9_on>
-  <d9_off><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>131</LINE></d9_off>
-  <d9_blink><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>135</LINE></d9_blink>
+  <main_loop><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>61</LINE></main_loop>
+  <delay><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>95</LINE></delay>
+  <sw1_handler><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>103</LINE></sw1_handler>
+  <sw2_handler><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>124</LINE></sw2_handler>
+  <d0_on><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>111</LINE></d0_on>
+  <d0_off><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>115</LINE></d0_off>
+  <d0_blink><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>119</LINE></d0_blink>
+  <d9_on><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>132</LINE></d9_on>
+  <d9_off><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>136</LINE></d9_off>
+  <d9_blink><FILE>D:\Programming\AtmelStudio\P2\P2P\P2\main.asm</FILE><LINE>140</LINE></d9_blink>
  </LABELS>
 </ASSEMBLER_INFO>

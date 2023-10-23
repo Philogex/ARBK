@@ -3,7 +3,7 @@
 ;
 ; Created: 20.10.2023 16:57:17
 ; Author : gx
-; Description: PD2 to SW1 and PD3 to SW2. PB0 to D0 and PB1 to D9
+; Description: PD0 to SW1 and PD1 to SW2. PB0 to D0 and PB1 to D9
 ;
 
 .include "m328pdef.inc"
@@ -19,7 +19,7 @@
 
 .equ F_CPU = 16000000
 .equ Prescaler = 1024
-.equ DelayCycles = (F_CPU / Prescaler) / 5
+.equ DelayCycles = (F_CPU / Prescaler)
 
 .org 0x0000
     rjmp init
