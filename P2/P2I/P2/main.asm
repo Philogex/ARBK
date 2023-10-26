@@ -54,7 +54,6 @@ init:
 	; init led FSM
 	ldi led_state_d0d9, (1 << 4) | (1 << 0)
 
-
     ; init timer
     ldi r18, (1 << WGM12) | (1 << CS10) | (1 << CS12)
 	sts TCCR1B, r18

@@ -135,7 +135,7 @@ void init()
   da:	8b e0       	ldi	r24, 0x0B	; 11
   dc:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7e0081>
 	OCR1A = (F_CPU / Prescaler) / 1000;
-  e0:	8c e3       	ldi	r24, 0x3C	; 60
+  e0:	8a ef       	ldi	r24, 0xFA	; 250
   e2:	90 e0       	ldi	r25, 0x00	; 0
   e4:	90 93 89 00 	sts	0x0089, r25	; 0x800089 <__TEXT_REGION_LENGTH__+0x7e0089>
   e8:	80 93 88 00 	sts	0x0088, r24	; 0x800088 <__TEXT_REGION_LENGTH__+0x7e0088>
@@ -211,9 +211,9 @@ int main()
 	DDRB |= (1 << DDB0);
  15a:	20 9a       	sbi	0x04, 0	; 4
 	
-	waitUntil(2000);
- 15c:	60 ed       	ldi	r22, 0xD0	; 208
- 15e:	77 e0       	ldi	r23, 0x07	; 7
+	waitUntil(4000);
+ 15c:	60 ea       	ldi	r22, 0xA0	; 160
+ 15e:	7f e0       	ldi	r23, 0x0F	; 15
  160:	80 e0       	ldi	r24, 0x00	; 0
  162:	90 e0       	ldi	r25, 0x00	; 0
  164:	0e 94 9b 00 	call	0x136	; 0x136 <waitUntil>

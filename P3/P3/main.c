@@ -4,11 +4,12 @@
  * Created: 21.10.2023 02:11:29
  * Author : gx
  * Description: PB0 connected to any LED (ex. D0). i literally have no idea what the point of this is. we already had a timer, but put it into a function now
- */ 
+ */
+
 #include <avr/io.h>
 
 #define F_CPU 16000000UL
-#define Prescaler 264
+#define Prescaler 64
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -50,7 +51,7 @@ int main()
 	init();
 	DDRB |= (1 << DDB0);
 	
-	waitUntil(2000);
+	waitUntil(4000);
 	while (1)
 	{
 		PORTB ^= (1 << DDB0);

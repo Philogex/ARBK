@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P1\P1\main.asm Thu Oct 12 09:16:40 2023
+AVRASM ver. 2.2.7  D:\Programming\AtmelStudio\P1\P1\main.asm Thu Oct 26 08:31:39 2023
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
 D:\Programming\AtmelStudio\P1\P1\main.asm(9): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.209\avrasm\inc\m328pdef.inc'
